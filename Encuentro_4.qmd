@@ -1,0 +1,982 @@
+---
+title: "Manejo de datos"
+subtitle: "Curso: Introducción a Ciencia de Datos"
+
+author:
+  - "Dr. Gustavo Giménez"
+  - "Mg. Ana Haique"
+
+date: today
+date-format: "D [de] MMMM [de] YYYY"
+
+lang: es
+
+title-slide-attributes:
+  class: title-slide
+
+format:
+  revealjs:
+    theme: dark
+    highlight-style: dracula
+    slide-number: true
+    progress: true
+    transition: fade
+    center: false
+    css: styles.css
+
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+# Importación (Episodio II)
+
+![Librerías de tidyverse](./Imagenes/holedevouring.jpg){ width=50% }
+
+## Funciones `read_*` en `tidyverse`
+
+::: {.columns}
+
+::: {.column width="50%"}
+### Archivos Delimitados
+* `read_csv()`: Comas (`,`)
+* `read_csv2()`: Punto y coma (`;`)
+* `read_tsv()`: Tabulaciones (`\t`)
+* `read_delim()`: Delimitador a elección
+
+
+
+:::
+
+::: {.column width="50%"}
+### Ancho Fijo y Espacios
+* `read_fwf()`: Ancho fijo (*Fixed-width*)
+* `read_table()`: Espacios en blanco
+
+:::
+
+:::
+
+---
+
+## Funciones `read_*` en estructura y texto
+
+::: {.columns}
+
+::: {.column width="50%"}
+### Estructuras y Logs
+* `read_rds()`: Formato nativo R (`.rds`)
+* `read_log()`: Logs de servidores web
+
+:::
+
+::: {.column width="50%"}
+
+### Texto Plano
+* `read_lines()`: Lee línea por línea
+* `read_file()`: Lee el archivo completo en un string
+
+:::
+
+:::
+
+
+```{r}
+#| eval: false
+
+# Importar un CSV con formato hispano (decimales con coma)
+datos <- read_csv2("datos_ventas.csv")
+
+# Importar con un delimitador arbitrario (ej. barra vertical)
+datos_custom <- read_delim("exportacion.txt", delim = "|")
+
+# Cargar un objeto nativo de R previamente guardado
+modelo <- read_rds("modelo_entrenado.rds")
+```
+
+
+---
+
+
+
+## Importación de Archivos Comprimidos
+
+Las funciones `read_*` de `readr` (en `tidyverse`) detectan y descomprimen automáticamente en memoria los archivos al leerlos, sin necesidad de instalar paquetes adicionales ni desempacar en el disco duro.
+
+::: {.columns}
+
+::: {.column width="50%"}
+**Formatos soportados de forma nativa:**
+
+* **Gzip (`.gz`):** El estándar más habitual para comprimir datasets extensos.
+* **Bzip2 (`.bz2`):** Ofrece mayor tasa de compresión.
+
+:::
+
+
+::: {.column width="50%"}
+
+
+* **XZ (`.xz`):** Alta compresión usada en servidores y repositorios.
+* **ZIP (`.zip`):** Funciona directamente si el archivo contiene un único texto.
+
+:::
+
+:::
+
+
+## Casos especiales (Archivos ZIP):
+
+
+```{r}
+#| eval: false
+# Si el .zip contiene un solo archivo:
+library(tidyverse)
+datos_zip <- read_csv("reporte_anual.zip")
+
+# Si el .zip contiene múltiples archivos:
+datos_zip_sub <- read_csv(
+  unz("archivos.zip", "tabla_especifica.csv")
+)
+```
+
+
+## Importación de Hojas de Cálculo con `readxl`
+
+A diferencia de `readr`, el paquete **`readxl`** pertenece al ecosistema Tidyverse pero **debe cargarse explícitamente** con `library(readxl)`. Detecta automáticamente si el archivo es `.xls` o `.xlsx`.
+
+:::: {.columns}
+
+::: {.column width="45%"}
+
+
+**Funciones y Parámetros Clave:**
+
+* **`excel_sheets()`**: Lista las hojas del libro sin cargar los datos.
+* **`sheet`**: Especifica la hoja por nombre (`"Ventas"`) o posición (`2`).
+* **`range`**: Lee un rango exacto de celdas (ej. `"B3:F20"`).
+
+:::
+
+::: {.column width="55%"}
+
+
+* **`na`**: Define cadenas que representan valores nulos (ej. `c("", "N/A", "-")`).
+* **`col_types`**: Fuerza tipos de columna o omite (`"skip"`).
+* **`skip`**: Omite un número de filas iniciales.
+
+:::
+
+::::
+
+
+## Ejemplo de uso con `readxl` 
+
+
+```{r}
+#| eval: false
+library(readxl)
+
+# 1. Explorar nombres de hojas
+excel_sheets("reporte_2026.xlsx")
+
+# 2. Leer hoja específica por nombre
+ventas <- read_excel("reporte_2026.xlsx", sheet = "Ventas")
+
+# 3. Leer rango exacto y personalizar nulos
+datos_sub <- read_excel(
+  path = "reporte_2026.xlsx",
+  sheet = 1,
+  range = "B3:F25",
+  na = c("", "N/A", "-"),
+  col_types = c("text", "numeric", "date", "skip", "numeric")
+)
+```
+
+
+## Leer con datos faltantes
+
+
+En hojas de calculo se escriben con . a veces con espacios en blancos o 
+ambos
+```{r}
+#| eval: false
+
+# Si los datos faltantes están marcados solo con un punto:
+datos <- read_excel("tu_archivo.xlsx", na = ".")
+
+# Recomendado: considerar tanto el punto como las celdas vacías como NA
+datos <- read_excel("tu_archivo.xlsx", na = c(".", ""))
+```
+
+
+
+## Omisión de Filas Iniciales y Encabezados en `readxl`
+
+Es común encontrar archivos de Excel con títulos, notas o metadatos en las primeras filas antes de la tabla principal. Utiliza el argumento **`skip`** para omitirlos:
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Parámetros clave:**
+
+* **`skip = n`**: Saltea las primeras `n` filas del archivo.
+* **`col_names = TRUE`**: Por defecto, toma la primera fila útil (post-salteo) como nombre de columnas.
+
+
+:::
+
+::: {.column width="50%"}
+* **`na = c(".", "")`**: Combina el salteo de filas con la conversión de caracteres a `NA`.
+
+:::
+
+::::
+
+
+## Ejemplo con Código:
+
+
+```{r}
+#| eval: false
+
+
+# 1. Saltear las primeras 4 filas de metadatos/texto
+datos <- read_excel("reporte_ventas.xlsx", skip = 4)
+
+# 2. Saltear filas e indicar que el punto "." es dato faltante
+datos_limpios <- read_excel(
+  path = "reporte_ventas.xlsx",
+  sheet = "Ventas_2026",
+  skip = 4,
+  na = c(".", "")
+)
+```
+
+
+
+## Ejercitando
+
+::: {.callout-important appearance="simple"}
+📁 **Datos_ejercicios:** `Datos_Morfometricos_final.xlsx` — Mediciones morfométricas de cabras y cabritos al nacer.
+:::
+
+::: {.incremental}
+1. **Identificar hojas:** Inspeccionar la estructura del libro con la función adecuada.
+2. **Importar datos:** Cargar los datos teniendo en cuenta los problemas que presenta cada uno.
+3. **Estadística descriptiva:** Calcular $\bar{x}$ y $s$ según **tratamiento** y **sexo** (Hoja 2).
+4. **Análisis gráfico:** Graficar la relación entre **altura** y **perímetro torácico**.
+5. **Análisis gráfico:** Graficar la relación entre **altura** y **perímetro torácico**, considerando el sexo al nacer.
+:::
+
+
+
+
+
+
+## Escribir un Excel
+
+
+Realizar una operación opuesta a partir de un objeto
+exportar a un .xlsx.
+
+Archivo de datos de R a .xlsx
+
+
+```{r}
+#Instalar el paquete writexl
+#install.packages("writexl")
+data(cars)
+head(cars)
+writexl::write_xlsx(cars, path = "Datos/Ejemplo_datos/autos20.xlsx")
+```
+
+
+
+## Unir Hojas de Excel con `bind_cols()`
+
+:::: {.columns}
+
+::: {.column width="45%"}
+
+### Pasos del proceso:
+
+1. **Listar hojas:** Con `excel_sheets()`.
+
+2. **Cargar por separado:** .
+
+3. **Unir en un `tibble`:** Con `bind_cols()` concatenamos las columnas horizontalmente.
+
+> **Nota:** Ambas hojas deben tener exactamente el mismo número de filas y coincidir ordenadamente.
+
+:::
+
+::: {.column width="55%"}
+
+```{r}
+#| eval: false
+
+
+# 1. Cargar paquetes y listar hojas
+ruta_excel <- "reporte_ventas.xlsx"
+hojas <- excel_sheets(ruta_excel)
+
+# 2. Cargar cada una por separado (solo 2 hojas)
+hoja_1 <- read_excel(path = ruta_excel, sheet = hojas[1])
+hoja_2 <- read_excel(path = ruta_excel, sheet = hojas[2])
+
+# 3. Unir en un solo tibble con bind_cols
+datos_completos <- bind_cols(hoja_1, hoja_2)
+
+# Visualizar resultado
+print(datos_completos)
+```
+
+:::
+
+::::
+
+## Combinar Datasets: `bind_cols()` vs `bind_rows()`
+
+:::: {.columns}
+
+::: {.column width="45%"}
+
+### Diferencias Clave:
+
+* **`bind_cols()` (Unión Horizontal):**
+  * Junta columnas de dos o más tablas de lado a lado.
+  * **Requisito:** Mismo número de filas en ambas tablas.
+
+
+:::
+
+::: {.column width="55%"}
+
+
+* **`bind_rows()` (Unión Vertical):**
+  * Apila registros (filas) uno debajo del otro.
+  * **Requisito:** Nombres de columnas coincidentes (si una tabla no tiene una columna, se rellena con `NA`).
+
+:::
+
+::::
+
+
+
+## Pegado de tablas
+
+
+```{r}
+#| eval: false
+#| echo: true
+
+
+# 1. Unión Horizontal (Añadir Columnas)
+# Junta df1 y df2 a lo ancho
+datos_ancho <- bind_cols(df1, df2)
+
+# 2. Unión Vertical (Añadir Filas / Apilar)
+# Coloca las filas de df2 debajo de df1
+datos_largo <- bind_rows(df1, df2)
+
+# Ejemplo apilando indicando el origen:
+datos_apilados <- bind_rows(
+  "Hoja 1" = df1, 
+  "Hoja 2" = df2, 
+  .id = "origen"
+)
+```
+
+
+
+# Otros tipos de ingresos de datos
+
+
+
+## Ingresar datos manualmente con tibble
+```{r}
+#| echo: true
+
+library(tibble)
+# Crear tibble definiendo vectores de columna
+datos_col <- tibble(
+  id = 1:3,
+  cliente = c("Ana", "Carlos", "Beatriz"),
+  ventas = c(1500, 2300, 1800),
+  
+  # Referencia a la variable 'ventas' creada arriba
+  comision = ventas * 0.10,
+  
+  # Reciclaje automático de valor único
+  region = "Sur"
+)
+
+print(datos_col)
+```
+
+
+
+## Ingreso Fila por Fila con tribble
+
+
+
+
+Características de tribble():
+    *Transposed Tibble*: Diseñado para escribir tablas pequeñas de forma visual en el código.
+    Encabezados con Tilde (~): Las columnas se definen antecediendo una tilde (ej. ~columna).
+    Lectura Fila a Fila: Los datos se ingresan de izquierda a derecha separados por comas.
+
+
+
+```{r}
+#| echo: true
+
+# Crear tibble orientado a filas (legible y tabulado)
+datos_filas <- tribble(
+  ~id, ~cliente,  ~ventas, ~categoria,
+    1, "Ana",     1500,    "Premium",
+    2, "Carlos",  2300,    "Estándar",
+    3, "Beatriz", 1800,    "Premium"
+)
+
+print(datos_filas)
+
+```
+
+
+
+
+```{r}
+#| echo: false
+#| eval: false
+library(readr)
+library(dplyr)
+
+# 1. Crear dos data frames de ejemplo
+df_ventas <- tibble(
+  id = 1:3, 
+  producto = c("Laptop", "Mouse", "Teclado"), 
+  monto = c(1200, 25, 45)
+)
+
+df_clientes <- tibble(
+  id = 1:3, 
+  nombre = c("Ana", "Carlos", "Beatriz"), 
+  ciudad = c("Mendoza", "Rosario", "Cordoba")
+)
+
+# 1. Datos sobre el inventario disponible de cada producto
+df_inventario <- tibble(
+  producto = c("Laptop", "Mouse", "Teclado"),
+  stock = c(15, 120, 45),
+  categoria = c("Cómputo", "Periféricos", "Periféricos")
+)
+
+# 2. Datos sobre los envíos asociados a cada cliente (id)
+df_envios <- tibble(
+  id = 1:3,
+  transporte = c("Andreani", "OCA", "Correo Argentino"),
+  estado = c("Entregado", "En camino", "Pendiente")
+)
+
+# 2. Guardar ambos data frames como archivos .csv
+write_csv(df_ventas, "Datos/Ejemplo_datos/ventas.csv")
+write_csv(df_clientes, "Datos/Ejemplo_datos/clientes.csv")
+write_csv(df_inventario, "Datos/Ejemplo_datos/datos_multiple/inventario.csv")
+write_csv(df_envios, "Datos/Ejemplo_datos/datos_multiple/envios.csv")
+
+# 3. Comprimir los dos archivos CSV dentro de un archivo .zip
+zip(zipfile = "Datos/Ejemplo_datos/reportes.zip", 
+    files = c("Datos/Ejemplo_datos/ventas.csv",
+              "Datos/Ejemplo_datos/clientes.csv")
+    )
+
+# 4. Eliminar los archivos .csv sueltos del disco (opcional)
+#file.remove(c("ventas.csv", "clientes.csv"))
+
+# 5. Inspeccionar el contenido del archivo .zip sin descomprimir
+unzip("Datos/Ejemplo_datos/reportes.zip", list = TRUE)
+
+# 6. Leer un archivo específico dentro del .zip a un tibble
+ventas_desde_zip <- read_csv(unz("Datos/Ejemplo_datos/reportes.zip", "Datos/Ejemplo_datos/ventas.csv"))
+print(ventas_desde_zip)
+```
+
+
+## Importar múltiples archivos
+
+A veces es necesario importar varios archivos al mismo tiempo
+
+```{r}
+library(readr)
+#1.Listar los archivos
+list.files("Datos/Ejemplo_datos/datos_multiple/", pattern = "\\.csv$") 
+
+#Lee e importa todos los archivos csv a una lista
+todos_data_frames <- lapply(list.files("Datos/Ejemplo_datos/datos_multiple/", pattern = "*.csv", full.names = TRUE), read_csv)
+todos_data_frames
+```
+
+
+## Ejercitando (II) {.smaller}
+
+::: {.callout-important appearance="simple"}
+📁 **Conjunto de datos:** `precios_manzana_pera_desde17_corpat.csv.gz` — Registro de precios de Manzanas y Peras (MCBA, 2017–2026).
+:::
+
+::: {.incremental}
+1. **Compresión (.gz):** ¿Qué tipo de archivo es y qué ventajas presenta respecto a un `.csv` tradicional?
+2. **Importación y estructura:** Importar los datos. ¿Qué función de `{readr}` se usa, qué dimensiones tiene el *tibble* y qué tipos de datos contiene?
+3. **Formato de fechas:** Transformar la columna `dia` a formato de fecha utilizando el paquete `{lubridate}`.
+4. **Extracción de componentes:** Obtener variables para **año**, **mes (con nombre)** y **semana del año**.
+5. **Filtrado y visualización:** Filtrar la especie `"Manzana"`, calcular la media del `MOPK` por año/mes y graficar. ¿Qué patrón o dato extraño se observa?
+:::
+
+
+# Bases de datos
+
+![Librerías de tidyverse](./Imagenes/brutal.jpg){ width=50% }
+
+
+## ¿Qué es una Base de Datos? {.smaller}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### Una analogía sencilla
+
+Podemos concebirla como **gran biblioteca digital centralizada**:
+
+* En lugar de tener archivos Excel desparramados en la computadora, la información está ordenada en **tablas**.
+* Cada tabla es como una planilla (con columnas para variables y filas para registros).
+* El sistema garantiza que los datos estén **protegidos**, **actualizados** y **disponibles** para muchas personas al mismo tiempo.
+
+::: {.callout-note icon=false}
+## 💡 La diferencia con Excel
+Un archivo `.xlsx` esta en la computadora y tiene un límite estricto de filas. Una **Base de Datos** vive en un servidor, maneja millones de datos y no se "cuelga".
+:::
+:::
+
+::: {.column width="50%"}
+### ¿Por qué las usamos en Ciencia de Datos?
+
+* **Estructura limpia:** Evita datos duplicados o inconsistentes.
+* **Velocidad de búsqueda:** Utiliza **índices** (como el índice de un libro) para encontrar un registro en milisegundos entre millones de filas.
+* **Fuente única de verdad:** Todo el equipo analiza los mismos datos reales sin andar enviándose versiones (`datos_final_v2.csv`).
+:::
+
+::::
+
+
+
+
+## Acceso a Bases de Datos en R {.smaller}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### ¿Por qué conectarse directamente?
+* **Autonomía:** Evita depender de descargas intermedias de archivos `.csv`.
+* **Eficiencia:** Consulta los datos necesarios en tiempo real directamente en el servidor.
+* **Estándar:** Interactúa mediante SQL usando tus sintaxis habituales de `dplyr`.
+
+::: {.callout-note icon=false}
+## 🛠️ Herramientas clave
+* **`DBI`**: Interfaz de bajo nivel que gestiona la conexión y ejecuta consultas SQL.
+* **`dbplyr`**: Interfaz de alto nivel que traduce código `dplyr` a consultas SQL.
+:::
+:::
+
+::: {.column width="50%"}
+### Paquetes requeridos
+
+```r
+library(DBI)
+library(dbplyr)
+library(tidyverse)
+```
+
+::: {.callout-tip icon=false}
+💡 Filosofía
+
+No necesitas ser un experto en SQL para empezar: {dbplyr} traduce tus operaciones de manipulación de datos automáticamente.
+:::
+:::
+
+::::
+
+
+
+## Conexión a una Base de Datos {.smaller}
+
+:::: {.columns}
+
+::: {.column width="45%"}
+Arquitectura de Conexión
+
+  DBI: Proporciona las funciones genéricas de control (dbConnect(), etc.).
+
+  Driver específico: Paquete según el motor (ej: RPostgres o RMariaDB).
+
+  odbc: Protocolo alternativo universal si no hay un driver nativo.
+
+::: {.callout-warning icon=false}
+🔑 Credenciales
+
+Los parámetros de conexión (host, puerto, usuario, contraseña) te los proporcionará el administrador de la base de datos (DBA).
+:::
+:::
+
+::: {.column width="55%"}
+Ejemplo de Conexión en R
+R
+
+```{r}
+#| echo: true
+#| eval: false
+# Ejemplo 1: Conexión a MariaDB
+con <- DBI::dbConnect(
+  RMariaDB::MariaDB(), 
+  username = "foo"
+)
+
+# Ejemplo 2: Conexión a PostgreSQL en servidor remoto
+con <- DBI::dbConnect(
+  RPostgres::Postgres(), 
+  hostname = "databases.mycompany.com", 
+  port = 1234
+)
+```
+
+:::
+
+::::
+
+
+## Paso 1:Conexión a la base 
+
+
+ Cargar paquetes y conectar a la base de datos
+
+Usamos DBI para crear el canal de comunicación con la base SQLite y dbplyr para trabajar con sintaxis R sobre las tablas remotas.
+R.
+
+```{r}
+library(DBI)
+library(RSQLite)
+library(dplyr)
+library(dbplyr)
+
+# Establecer la conexión con el archivo de base de datos
+con1 <- dbConnect(
+  RSQLite::SQLite(), 
+  "Datos/Ejemplo_datos/diamonds_relacional.sqlite"
+  )
+```
+
+
+## Paso 2: inspeccionar tablas
+
+
+Antes de realizar la  consulta, verificamos qué tablas existen dentro de la base de datos y qué columnas tiene cada una.
+
+
+
+```{r}
+# Listar todas las tablas en la base de datos
+dbListTables(con1)
+# Resultado esperado: "claridades" "cortes" "diamantes"
+
+# Ver las columnas de una tabla específica
+dbListFields(con1, "diamantes")
+
+# (Opcional) Ver la estructura general mediante una consulta SQL rápida
+dbGetQuery(con1, "SELECT COUNT(*) AS total_filas FROM diamantes")
+```
+
+## Paso 3: Crear referencias de tabla con dbplyr
+
+La función tbl() crea un objeto lazy table. No carga los 50.000 datos en la memoria RAM de R, sino que establece un enlace hacia la tabla en disco.
+
+
+
+```{r}
+
+# Crear referencias virtuales a cada tabla
+diamantes_db <- tbl(con1, "diamantes")
+cortes_db    <- tbl(con1, "cortes")
+claridades_db <- tbl(con1, "claridades")
+
+# Si imprimes la variable, muestra las primeras 10 filas sin traer toda la base
+print(diamantes_db)
+```
+
+
+## Paso 4: Manipular los datos con sintaxis dplyr 
+
+
+Se usan los verbos  habituales de {dplyr} (filter, group_by, summarise, left_join, mutate). Todo se procesará dentro del motor SQLite.
+
+
+```{r}
+# Unir las 3 tablas relacionales y calcular el precio medio por tipo de corte
+resumen_cortes <- diamantes_db %>% 
+  left_join(cortes_db, by = "id_corte") %>% 
+  left_join(claridades_db, by = "id_claridad") %>% 
+  filter(price > 1000) %>% 
+  group_by(corte) %>% 
+  summarise(
+    cantidad = n(),
+    precio_promedio = mean(price, na.rm = TRUE),
+    quilates_max = max(carat, na.rm = TRUE)
+  ) %>% 
+  arrange(desc(precio_promedio))
+```
+
+
+
+## Paso 6: Traer el resultado final a R con collect()
+
+Hasta este punto, nada se ha descargado a R. Cuando se requiera  guardar el resultado procesado como un data.frame local, se ejecut collect():
+
+
+```{r}
+# Descargar el resultado procesado a la memoria RAM de R
+datos_locales <- resumen_cortes %>% collect()
+
+# Verificar la clase del objeto procesado
+class(datos_locales) # "tbl_df" "tbl" "data.frame"
+
+### Graficar el resultado local
+library(ggplot2)
+
+ggplot(datos_locales, aes(x = reorder(corte, precio_promedio), y = precio_promedio)) +
+  geom_col(fill = "#38bdf8") +
+  coord_flip() +
+  labs(title = "Precio promedio por corte", x = "Corte", y = "USD") +
+  theme_minimal()
+```
+
+## Ver la sintaxis que de sql
+
+```{r}
+# Ver la consulta SQL en texto plano que se enviará al servidor
+resumen_cortes %>% show_query()
+```
+
+
+```{r}
+#| echo: true
+#| eval: false
+#| fig-height: 4
+#| fig-width: 8
+
+library(dm)
+
+# Carga las tablas, PK y FK automáticamente desde el esquema de SQLite
+modelo_dm <- dm_from_src(con1)
+
+# Dibujar directamente
+dm_draw(modelo_dm)
+
+```
+
+
+## Desconectar de la base de daos
+
+
+```{r}
+dbDisconnect(con1)
+```
+
+
+
+```{r}
+#| echo: false
+#| eval: false
+library(DBI)
+library(RSQLite)
+library(dplyr)
+
+# 1. Crear la base de datos
+con <- dbConnect(RSQLite::SQLite(), "Datos/Ejercicio_datos/sqlite_est.db")
+
+
+# 2. Crear tabla ESTUDIANTES
+dbExecute(con, "
+CREATE TABLE estudiantes (
+  id INTEGER PRIMARY KEY,
+  nombre TEXT,
+  edad INTEGER
+)")
+
+dbExecute(con, "
+INSERT INTO estudiantes VALUES
+(1, 'Mateo', 19),
+(2, 'Juan', 18),
+(3, 'Santiago', 20),
+(4, 'Sofía', 17),
+(5, 'Camila', 19),
+(6, 'Lucas', 21),
+(7, 'Valentina', 18),
+(8, 'Martín', 22),
+(9, 'Lucía', 19),
+(10, 'Joaquín', 20)
+")
+
+# 3. Crear tabla PROFESORES
+dbExecute(con, "
+CREATE TABLE profesores (
+  id INTEGER PRIMARY KEY,
+  nombre TEXT,
+  edad INTEGER
+)")
+
+dbExecute(con, "
+INSERT INTO profesores VALUES
+(1, 'Prof. Gómez', 35),
+(2, 'Prof. Fernández', 42),
+(3, 'Dr. Martínez', 50),
+(4, 'Dra. López', 38),
+(5, 'Prof. Rossi', 45)
+")
+
+# 4. Crear tabla CURSOS
+dbExecute(con, "
+CREATE TABLE cursos (
+  id INTEGER PRIMARY KEY,
+  nombre TEXT,
+  profesor_id INTEGER,
+  materia TEXT,
+  FOREIGN KEY(profesor_id) REFERENCES profesores(id)
+)")
+
+dbExecute(con, "
+INSERT INTO cursos VALUES
+(1, 'Matemática 101', 1, 'Matemática'),
+(2, 'Historia 201', 2, 'Historia'),
+(3, 'Ciencias 301', 3, 'Ciencias'),
+(4, 'Matemática 102', 1, 'Matemática'),
+(5, 'Programación 101', 4, 'Informática'),
+(6, 'Estadística 201', 5, 'Estadística'),
+(7, 'Historia 202', 2, 'Historia')
+")
+
+# 5. Listo! Probar que quedó
+dbListTables(con)
+
+# Ejemplo 1: Alumnos mayores de 18
+tbl(con, "students") %>% 
+  filter(age >= 18) %>% 
+  collect()
+
+# Ejemplo 2: Cursos con nombre del profesor
+tbl(con, "courses") %>%
+  inner_join(tbl(con, "teachers"), by = c("teacher_id" = "id")) %>%
+  select(course_name = name.x, teacher = name.y, subject) %>%
+  collect()
+
+dbDisconnect(con)
+```
+
+
+
+```{r}
+#| echo: false
+#| eval: false
+library(tidyverse)
+library(DBI)
+library(RSQLite)
+
+# 1. Normalizar y estructurar los datos en 3 dataframes
+data("diamonds", package = "ggplot2")
+
+# Tabla 1 (Dimensión): Cortes
+tabla_cortes <- diamonds %>% 
+  distinct(cut) %>% 
+  mutate(id_corte = row_number(), corte = as.character(cut)) %>% 
+  select(id_corte, corte)
+
+# Tabla 2 (Dimensión): Claridades
+tabla_claridades <- diamonds %>% 
+  distinct(clarity) %>% 
+  mutate(id_claridad = row_number(), claridad = as.character(clarity)) %>% 
+  select(id_claridad, claridad)
+
+# Tabla 3 (Hechos): Diamantes con claves foráneas
+tabla_diamantes <- diamonds %>% 
+  mutate(
+    id_diamante = row_number(), 
+    corte = as.character(cut), 
+    claridad = as.character(clarity)
+  ) %>% 
+  left_join(tabla_cortes, by = "corte") %>% 
+  left_join(tabla_claridades, by = "claridad") %>% 
+  select(id_diamante, carat, color, price, x, y, z, id_corte, id_claridad)
+
+# 2. Conectar a SQLite y activar soporte para claves foráneas
+#dir.create("Datos", showWarnings = FALSE)
+con <- dbConnect(RSQLite::SQLite(), "./Datos/Ejemplo_datos/diamonds_relacional.sqlite")
+dbExecute(con, "PRAGMA foreign_keys = ON;")
+
+# 3. Crear las tablas definiendo PRIMARY KEY y FOREIGN KEY
+dbExecute(con, "
+CREATE TABLE cortes (
+  id_corte INTEGER PRIMARY KEY,
+  corte TEXT NOT NULL
+);
+")
+
+dbExecute(con, "
+CREATE TABLE claridades (
+  id_claridad INTEGER PRIMARY KEY,
+  claridad TEXT NOT NULL
+);
+")
+
+dbExecute(con, "
+CREATE TABLE diamantes (
+  id_diamante INTEGER PRIMARY KEY,
+  carat REAL,
+  color TEXT,
+  price INTEGER,
+  x REAL, y REAL, z REAL,
+  id_corte INTEGER,
+  id_claridad INTEGER,
+  FOREIGN KEY (id_corte) REFERENCES cortes(id_corte),
+  FOREIGN KEY (id_claridad) REFERENCES claridades(id_claridad)
+);
+")
+
+# 4. Cargar la información en cada tabla
+dbWriteTable(con, "cortes", tabla_cortes, append = TRUE)
+dbWriteTable(con, "claridades", tabla_claridades, append = TRUE)
+dbWriteTable(con, "diamantes", tabla_diamantes, append = TRUE)
+
+# 5. Consulta de prueba cruzando las 3 tablas con SQL (JOIN)
+dbGetQuery(con, "
+  SELECT d.id_diamante, d.price, c.corte, cl.claridad
+  FROM diamantes d
+  JOIN cortes c ON d.id_corte = c.id_corte
+  JOIN claridades cl ON d.id_claridad = cl.id_claridad
+  LIMIT 5
+")
+
+# 6. Consulta equivalente con dbplyr / dplyr
+t_diamantes <- tbl(con, "diamantes")
+t_cortes <- tbl(con, "cortes")
+t_claridades <- tbl(con, "claridades")
+
+t_diamantes %>% 
+  left_join(t_cortes, by = "id_corte") %>% 
+  left_join(t_claridades, by = "id_claridad") %>% 
+  select(id_diamante, price, corte, claridad) %>% 
+  head(5)
+
+# 7. Cerrar conexión
+dbDisconnect(con)
+```
+

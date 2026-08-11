@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<script src="Encuentro_4_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Encuentro_4_files/libs/quarto-html/tabby.min.js"></script>
+<script src="Encuentro_4_files/libs/quarto-html/popper.min.js"></script>
+<script src="Encuentro_4_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="Encuentro_4_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Encuentro_4_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="Encuentro_4_files/libs/quarto-html/quarto-syntax-highlighting-dark-ccafe2c99a4564d55934ca8539ca9f46.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.38">
+
+  <meta name="author" content="Dr.&nbsp;Gustavo Giménez">
+  <meta name="author" content="Mg. Ana Haique">
+  <title>Manejo de datos</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="Encuentro_4_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="Encuentro_4_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #f8f8f2; background-color: #282a36; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #f8f8f2; } /* Normal */
+    code span.al { color: #ff5555; font-weight: bold; } /* Alert */
+    code span.an { color: #ff79c6; } /* Annotation */
+    code span.at { color: #ff79c6; } /* Attribute */
+    code span.bn { color: #bd93f9; } /* BaseN */
+    code span.bu { color: #8be9fd; } /* BuiltIn */
+    code span.cf { color: #ff79c6; } /* ControlFlow */
+    code span.ch { color: #f1fa8c; } /* Char */
+    code span.cn { color: #bd93f9; font-weight: bold; } /* Constant */
+    code span.co { color: #6272a4; } /* Comment */
+    code span.cv { color: #8be9fd; } /* CommentVar */
+    code span.do { color: #ffb86c; } /* Documentation */
+    code span.dt { color: #8be9fd; font-style: italic; } /* DataType */
+    code span.dv { color: #bd93f9; } /* DecVal */
+    code span.er { color: #ff5555; text-decoration: underline; } /* Error */
+    code span.ex { color: #8be9fd; } /* Extension */
+    code span.fl { color: #bd93f9; } /* Float */
+    code span.fu { color: #50fa7b; } /* Function */
+    code span.im { color: #ff79c6; } /* Import */
+    code span.in { color: #f1fa8c; } /* Information */
+    code span.kw { color: #ff79c6; } /* Keyword */
+    code span.op { color: #f8f8f2; } /* Operator */
+    code span.ot { color: #50fa7b; } /* Other */
+    code span.pp { color: #ff79c6; } /* Preprocessor */
+    code span.re { color: #8be9fd; } /* RegionMarker */
+    code span.sc { color: #ff79c6; } /* SpecialChar */
+    code span.ss { color: #f1fa8c; } /* SpecialString */
+    code span.st { color: #f1fa8c; } /* String */
+    code span.va { color: #8be9fd; } /* Variable */
+    code span.vs { color: #f1fa8c; } /* VerbatimString */
+    code span.wa { color: #ff5555; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="Encuentro_4_files/libs/revealjs/dist/theme/quarto-66e7b56b4df7f08af004c87a67492258.css">
+  <link rel="stylesheet" href="styles.css">
+  <link href="Encuentro_4_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="Encuentro_4_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="Encuentro_4_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="Encuentro_4_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-dark">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="title-slide center">
+  <h1 class="title">Manejo de datos</h1>
+  <p class="subtitle">Curso: Introducción a Ciencia de Datos</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Dr.&nbsp;Gustavo Giménez 
+</div>
+</div>
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Mg. Ana Haique 
+</div>
+</div>
+</div>
+
+  <p class="date">11 de agosto de 2026</p>
+</section>
+<section>
+<section id="importación-episodio-ii" class="title-slide slide level1 center">
+<h1>Importación (Episodio II)</h1>
+
+<img data-src="./Imagenes/holedevouring.jpg" style="width:50.0%" class="r-stretch quarto-figure-center"><p class="caption">Librerías de tidyverse</p></section>
+<section id="funciones-read_-en-tidyverse" class="slide level2">
+<h2>Funciones <code>read_*</code> en <code>tidyverse</code></h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<h3 id="archivos-delimitados">Archivos Delimitados</h3>
+<ul>
+<li><code>read_csv()</code>: Comas (<code>,</code>)</li>
+<li><code>read_csv2()</code>: Punto y coma (<code>;</code>)</li>
+<li><code>read_tsv()</code>: Tabulaciones (<code>\t</code>)</li>
+<li><code>read_delim()</code>: Delimitador a elección</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<h3 id="ancho-fijo-y-espacios">Ancho Fijo y Espacios</h3>
+<ul>
+<li><code>read_fwf()</code>: Ancho fijo (<em>Fixed-width</em>)</li>
+<li><code>read_table()</code>: Espacios en blanco</li>
+</ul>
+</div></div>
+</section>
+<section id="funciones-read_-en-estructura-y-texto" class="slide level2">
+<h2>Funciones <code>read_*</code> en estructura y texto</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<h3 id="estructuras-y-logs">Estructuras y Logs</h3>
+<ul>
+<li><code>read_rds()</code>: Formato nativo R (<code>.rds</code>)</li>
+<li><code>read_log()</code>: Logs de servidores web</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<h3 id="texto-plano">Texto Plano</h3>
+<ul>
+<li><code>read_lines()</code>: Lee línea por línea</li>
+<li><code>read_file()</code>: Lee el archivo completo en un string</li>
+</ul>
+</div></div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="co"># Importar un CSV con formato hispano (decimales con coma)</span></span>
+<span id="cb1-2"><a href=""></a>datos <span class="ot">&lt;-</span> <span class="fu">read_csv2</span>(<span class="st">"datos_ventas.csv"</span>)</span>
+<span id="cb1-3"><a href=""></a></span>
+<span id="cb1-4"><a href=""></a><span class="co"># Importar con un delimitador arbitrario (ej. barra vertical)</span></span>
+<span id="cb1-5"><a href=""></a>datos_custom <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"exportacion.txt"</span>, <span class="at">delim =</span> <span class="st">"|"</span>)</span>
+<span id="cb1-6"><a href=""></a></span>
+<span id="cb1-7"><a href=""></a><span class="co"># Cargar un objeto nativo de R previamente guardado</span></span>
+<span id="cb1-8"><a href=""></a>modelo <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"modelo_entrenado.rds"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="importación-de-archivos-comprimidos" class="slide level2">
+<h2>Importación de Archivos Comprimidos</h2>
+<p>Las funciones <code>read_*</code> de <code>readr</code> (en <code>tidyverse</code>) detectan y descomprimen automáticamente en memoria los archivos al leerlos, sin necesidad de instalar paquetes adicionales ni desempacar en el disco duro.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Formatos soportados de forma nativa:</strong></p>
+<ul>
+<li><strong>Gzip (<code>.gz</code>):</strong> El estándar más habitual para comprimir datasets extensos.</li>
+<li><strong>Bzip2 (<code>.bz2</code>):</strong> Ofrece mayor tasa de compresión.</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<ul>
+<li><strong>XZ (<code>.xz</code>):</strong> Alta compresión usada en servidores y repositorios.</li>
+<li><strong>ZIP (<code>.zip</code>):</strong> Funciona directamente si el archivo contiene un único texto.</li>
+</ul>
+</div></div>
+</section>
+<section id="casos-especiales-archivos-zip" class="slide level2">
+<h2>Casos especiales (Archivos ZIP):</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="co"># Si el .zip contiene un solo archivo:</span></span>
+<span id="cb2-2"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-3"><a href=""></a>datos_zip <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"reporte_anual.zip"</span>)</span>
+<span id="cb2-4"><a href=""></a></span>
+<span id="cb2-5"><a href=""></a><span class="co"># Si el .zip contiene múltiples archivos:</span></span>
+<span id="cb2-6"><a href=""></a>datos_zip_sub <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(</span>
+<span id="cb2-7"><a href=""></a>  <span class="fu">unz</span>(<span class="st">"archivos.zip"</span>, <span class="st">"tabla_especifica.csv"</span>)</span>
+<span id="cb2-8"><a href=""></a>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="importación-de-hojas-de-cálculo-con-readxl" class="slide level2">
+<h2>Importación de Hojas de Cálculo con <code>readxl</code></h2>
+<p>A diferencia de <code>readr</code>, el paquete <strong><code>readxl</code></strong> pertenece al ecosistema Tidyverse pero <strong>debe cargarse explícitamente</strong> con <code>library(readxl)</code>. Detecta automáticamente si el archivo es <code>.xls</code> o <code>.xlsx</code>.</p>
+<div class="columns">
+<div class="column" style="width:45%;">
+<p><strong>Funciones y Parámetros Clave:</strong></p>
+<ul>
+<li><strong><code>excel_sheets()</code></strong>: Lista las hojas del libro sin cargar los datos.</li>
+<li><strong><code>sheet</code></strong>: Especifica la hoja por nombre (<code>"Ventas"</code>) o posición (<code>2</code>).</li>
+<li><strong><code>range</code></strong>: Lee un rango exacto de celdas (ej. <code>"B3:F20"</code>).</li>
+</ul>
+</div><div class="column" style="width:55%;">
+<ul>
+<li><strong><code>na</code></strong>: Define cadenas que representan valores nulos (ej. <code>c("", "N/A", "-")</code>).</li>
+<li><strong><code>col_types</code></strong>: Fuerza tipos de columna o omite (<code>"skip"</code>).</li>
+<li><strong><code>skip</code></strong>: Omite un número de filas iniciales.</li>
+</ul>
+</div></div>
+</section>
+<section id="ejemplo-de-uso-con-readxl" class="slide level2">
+<h2>Ejemplo de uso con <code>readxl</code></h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">library</span>(readxl)</span>
+<span id="cb3-2"><a href=""></a></span>
+<span id="cb3-3"><a href=""></a><span class="co"># 1. Explorar nombres de hojas</span></span>
+<span id="cb3-4"><a href=""></a><span class="fu">excel_sheets</span>(<span class="st">"reporte_2026.xlsx"</span>)</span>
+<span id="cb3-5"><a href=""></a></span>
+<span id="cb3-6"><a href=""></a><span class="co"># 2. Leer hoja específica por nombre</span></span>
+<span id="cb3-7"><a href=""></a>ventas <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"reporte_2026.xlsx"</span>, <span class="at">sheet =</span> <span class="st">"Ventas"</span>)</span>
+<span id="cb3-8"><a href=""></a></span>
+<span id="cb3-9"><a href=""></a><span class="co"># 3. Leer rango exacto y personalizar nulos</span></span>
+<span id="cb3-10"><a href=""></a>datos_sub <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(</span>
+<span id="cb3-11"><a href=""></a>  <span class="at">path =</span> <span class="st">"reporte_2026.xlsx"</span>,</span>
+<span id="cb3-12"><a href=""></a>  <span class="at">sheet =</span> <span class="dv">1</span>,</span>
+<span id="cb3-13"><a href=""></a>  <span class="at">range =</span> <span class="st">"B3:F25"</span>,</span>
+<span id="cb3-14"><a href=""></a>  <span class="at">na =</span> <span class="fu">c</span>(<span class="st">""</span>, <span class="st">"N/A"</span>, <span class="st">"-"</span>),</span>
+<span id="cb3-15"><a href=""></a>  <span class="at">col_types =</span> <span class="fu">c</span>(<span class="st">"text"</span>, <span class="st">"numeric"</span>, <span class="st">"date"</span>, <span class="st">"skip"</span>, <span class="st">"numeric"</span>)</span>
+<span id="cb3-16"><a href=""></a>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="leer-con-datos-faltantes" class="slide level2">
+<h2>Leer con datos faltantes</h2>
+<p>En hojas de calculo se escriben con . a veces con espacios en blancos o ambos</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="co"># Si los datos faltantes están marcados solo con un punto:</span></span>
+<span id="cb4-2"><a href=""></a>datos <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"tu_archivo.xlsx"</span>, <span class="at">na =</span> <span class="st">"."</span>)</span>
+<span id="cb4-3"><a href=""></a></span>
+<span id="cb4-4"><a href=""></a><span class="co"># Recomendado: considerar tanto el punto como las celdas vacías como NA</span></span>
+<span id="cb4-5"><a href=""></a>datos <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"tu_archivo.xlsx"</span>, <span class="at">na =</span> <span class="fu">c</span>(<span class="st">"."</span>, <span class="st">""</span>))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="omisión-de-filas-iniciales-y-encabezados-en-readxl" class="slide level2">
+<h2>Omisión de Filas Iniciales y Encabezados en <code>readxl</code></h2>
+<p>Es común encontrar archivos de Excel con títulos, notas o metadatos en las primeras filas antes de la tabla principal. Utiliza el argumento <strong><code>skip</code></strong> para omitirlos:</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Parámetros clave:</strong></p>
+<ul>
+<li><strong><code>skip = n</code></strong>: Saltea las primeras <code>n</code> filas del archivo.</li>
+<li><strong><code>col_names = TRUE</code></strong>: Por defecto, toma la primera fila útil (post-salteo) como nombre de columnas.</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<ul>
+<li><strong><code>na = c(".", "")</code></strong>: Combina el salteo de filas con la conversión de caracteres a <code>NA</code>.</li>
+</ul>
+</div></div>
+</section>
+<section id="ejemplo-con-código" class="slide level2">
+<h2>Ejemplo con Código:</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="co"># 1. Saltear las primeras 4 filas de metadatos/texto</span></span>
+<span id="cb5-2"><a href=""></a>datos <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"reporte_ventas.xlsx"</span>, <span class="at">skip =</span> <span class="dv">4</span>)</span>
+<span id="cb5-3"><a href=""></a></span>
+<span id="cb5-4"><a href=""></a><span class="co"># 2. Saltear filas e indicar que el punto "." es dato faltante</span></span>
+<span id="cb5-5"><a href=""></a>datos_limpios <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(</span>
+<span id="cb5-6"><a href=""></a>  <span class="at">path =</span> <span class="st">"reporte_ventas.xlsx"</span>,</span>
+<span id="cb5-7"><a href=""></a>  <span class="at">sheet =</span> <span class="st">"Ventas_2026"</span>,</span>
+<span id="cb5-8"><a href=""></a>  <span class="at">skip =</span> <span class="dv">4</span>,</span>
+<span id="cb5-9"><a href=""></a>  <span class="at">na =</span> <span class="fu">c</span>(<span class="st">"."</span>, <span class="st">""</span>)</span>
+<span id="cb5-10"><a href=""></a>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="ejercitando" class="slide level2">
+<h2>Ejercitando</h2>
+<div class="callout callout-important callout-style-simple">
+<div class="callout-body">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-content">
+<p>📁 <strong>Datos_ejercicios:</strong> <code>Datos_Morfometricos_final.xlsx</code> — Mediciones morfométricas de cabras y cabritos al nacer.</p>
+</div>
+</div>
+</div>
+<ol type="1">
+<li class="fragment"><strong>Identificar hojas:</strong> Inspeccionar la estructura del libro con la función adecuada.</li>
+<li class="fragment"><strong>Importar datos:</strong> Cargar los datos teniendo en cuenta los problemas que presenta cada uno.</li>
+<li class="fragment"><strong>Estadística descriptiva:</strong> Calcular <span class="math inline">\(\bar{x}\)</span> y <span class="math inline">\(s\)</span> según <strong>tratamiento</strong> y <strong>sexo</strong> (Hoja 2).</li>
+<li class="fragment"><strong>Análisis gráfico:</strong> Graficar la relación entre <strong>altura</strong> y <strong>perímetro torácico</strong>.</li>
+<li class="fragment"><strong>Análisis gráfico:</strong> Graficar la relación entre <strong>altura</strong> y <strong>perímetro torácico</strong>, considerando el sexo al nacer.</li>
+</ol>
+</section>
+<section id="escribir-un-excel" class="slide level2">
+<h2>Escribir un Excel</h2>
+<p>Realizar una operación opuesta a partir de un objeto exportar a un .xlsx.</p>
+<p>Archivo de datos de R a .xlsx</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a><span class="co">#Instalar el paquete writexl</span></span>
+<span id="cb6-2"><a href=""></a><span class="co">#install.packages("writexl")</span></span>
+<span id="cb6-3"><a href=""></a><span class="fu">data</span>(cars)</span>
+<span id="cb6-4"><a href=""></a><span class="fu">head</span>(cars)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  speed dist
+1     4    2
+2     4   10
+3     7    4
+4     7   22
+5     8   16
+6     9   10</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a>writexl<span class="sc">::</span><span class="fu">write_xlsx</span>(cars, <span class="at">path =</span> <span class="st">"Datos/Ejemplo_datos/autos20.xlsx"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="unir-hojas-de-excel-con-bind_cols" class="slide level2">
+<h2>Unir Hojas de Excel con <code>bind_cols()</code></h2>
+<div class="columns">
+<div class="column" style="width:45%;">
+<h3 id="pasos-del-proceso">Pasos del proceso:</h3>
+<ol type="1">
+<li><p><strong>Listar hojas:</strong> Con <code>excel_sheets()</code>.</p></li>
+<li><p><strong>Cargar por separado:</strong> .</p></li>
+<li><p><strong>Unir en un <code>tibble</code>:</strong> Con <code>bind_cols()</code> concatenamos las columnas horizontalmente.</p></li>
+</ol>
+<blockquote>
+<p><strong>Nota:</strong> Ambas hojas deben tener exactamente el mismo número de filas y coincidir ordenadamente.</p>
+</blockquote>
+</div><div class="column" style="width:55%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="co"># 1. Cargar paquetes y listar hojas</span></span>
+<span id="cb9-2"><a href=""></a>ruta_excel <span class="ot">&lt;-</span> <span class="st">"reporte_ventas.xlsx"</span></span>
+<span id="cb9-3"><a href=""></a>hojas <span class="ot">&lt;-</span> <span class="fu">excel_sheets</span>(ruta_excel)</span>
+<span id="cb9-4"><a href=""></a></span>
+<span id="cb9-5"><a href=""></a><span class="co"># 2. Cargar cada una por separado (solo 2 hojas)</span></span>
+<span id="cb9-6"><a href=""></a>hoja_1 <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="at">path =</span> ruta_excel, <span class="at">sheet =</span> hojas[<span class="dv">1</span>])</span>
+<span id="cb9-7"><a href=""></a>hoja_2 <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="at">path =</span> ruta_excel, <span class="at">sheet =</span> hojas[<span class="dv">2</span>])</span>
+<span id="cb9-8"><a href=""></a></span>
+<span id="cb9-9"><a href=""></a><span class="co"># 3. Unir en un solo tibble con bind_cols</span></span>
+<span id="cb9-10"><a href=""></a>datos_completos <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(hoja_1, hoja_2)</span>
+<span id="cb9-11"><a href=""></a></span>
+<span id="cb9-12"><a href=""></a><span class="co"># Visualizar resultado</span></span>
+<span id="cb9-13"><a href=""></a><span class="fu">print</span>(datos_completos)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div></div>
+</section>
+<section id="combinar-datasets-bind_cols-vs-bind_rows" class="slide level2">
+<h2>Combinar Datasets: <code>bind_cols()</code> vs <code>bind_rows()</code></h2>
+<div class="columns">
+<div class="column" style="width:45%;">
+<h3 id="diferencias-clave">Diferencias Clave:</h3>
+<ul>
+<li><strong><code>bind_cols()</code> (Unión Horizontal):</strong>
+<ul>
+<li>Junta columnas de dos o más tablas de lado a lado.</li>
+<li><strong>Requisito:</strong> Mismo número de filas en ambas tablas.</li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:55%;">
+<ul>
+<li><strong><code>bind_rows()</code> (Unión Vertical):</strong>
+<ul>
+<li>Apila registros (filas) uno debajo del otro.</li>
+<li><strong>Requisito:</strong> Nombres de columnas coincidentes (si una tabla no tiene una columna, se rellena con <code>NA</code>).</li>
+</ul></li>
+</ul>
+</div></div>
+</section>
+<section id="pegado-de-tablas" class="slide level2">
+<h2>Pegado de tablas</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="co"># 1. Unión Horizontal (Añadir Columnas)</span></span>
+<span id="cb10-2"><a href=""></a><span class="co"># Junta df1 y df2 a lo ancho</span></span>
+<span id="cb10-3"><a href=""></a>datos_ancho <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(df1, df2)</span>
+<span id="cb10-4"><a href=""></a></span>
+<span id="cb10-5"><a href=""></a><span class="co"># 2. Unión Vertical (Añadir Filas / Apilar)</span></span>
+<span id="cb10-6"><a href=""></a><span class="co"># Coloca las filas de df2 debajo de df1</span></span>
+<span id="cb10-7"><a href=""></a>datos_largo <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(df1, df2)</span>
+<span id="cb10-8"><a href=""></a></span>
+<span id="cb10-9"><a href=""></a><span class="co"># Ejemplo apilando indicando el origen:</span></span>
+<span id="cb10-10"><a href=""></a>datos_apilados <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb10-11"><a href=""></a>  <span class="st">"Hoja 1"</span> <span class="ot">=</span> df1, </span>
+<span id="cb10-12"><a href=""></a>  <span class="st">"Hoja 2"</span> <span class="ot">=</span> df2, </span>
+<span id="cb10-13"><a href=""></a>  <span class="at">.id =</span> <span class="st">"origen"</span></span>
+<span id="cb10-14"><a href=""></a>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section></section>
+<section>
+<section id="otros-tipos-de-ingresos-de-datos" class="title-slide slide level1 center">
+<h1>Otros tipos de ingresos de datos</h1>
+
+</section>
+<section id="ingresar-datos-manualmente-con-tibble" class="slide level2">
+<h2>Ingresar datos manualmente con tibble</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="fu">library</span>(tibble)</span>
+<span id="cb11-2"><a href=""></a><span class="co"># Crear tibble definiendo vectores de columna</span></span>
+<span id="cb11-3"><a href=""></a>datos_col <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb11-4"><a href=""></a>  <span class="at">id =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
+<span id="cb11-5"><a href=""></a>  <span class="at">cliente =</span> <span class="fu">c</span>(<span class="st">"Ana"</span>, <span class="st">"Carlos"</span>, <span class="st">"Beatriz"</span>),</span>
+<span id="cb11-6"><a href=""></a>  <span class="at">ventas =</span> <span class="fu">c</span>(<span class="dv">1500</span>, <span class="dv">2300</span>, <span class="dv">1800</span>),</span>
+<span id="cb11-7"><a href=""></a>  </span>
+<span id="cb11-8"><a href=""></a>  <span class="co"># Referencia a la variable 'ventas' creada arriba</span></span>
+<span id="cb11-9"><a href=""></a>  <span class="at">comision =</span> ventas <span class="sc">*</span> <span class="fl">0.10</span>,</span>
+<span id="cb11-10"><a href=""></a>  </span>
+<span id="cb11-11"><a href=""></a>  <span class="co"># Reciclaje automático de valor único</span></span>
+<span id="cb11-12"><a href=""></a>  <span class="at">region =</span> <span class="st">"Sur"</span></span>
+<span id="cb11-13"><a href=""></a>)</span>
+<span id="cb11-14"><a href=""></a></span>
+<span id="cb11-15"><a href=""></a><span class="fu">print</span>(datos_col)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 5
+     id cliente ventas comision region
+  &lt;int&gt; &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt; 
+1     1 Ana       1500      150 Sur   
+2     2 Carlos    2300      230 Sur   
+3     3 Beatriz   1800      180 Sur   </code></pre>
+</div>
+</div>
+</section>
+<section id="ingreso-fila-por-fila-con-tribble" class="slide level2">
+<h2>Ingreso Fila por Fila con tribble</h2>
+<p>Características de tribble(): <em>Transposed Tibble</em>: Diseñado para escribir tablas pequeñas de forma visual en el código. Encabezados con Tilde (~): Las columnas se definen antecediendo una tilde (ej. ~columna). Lectura Fila a Fila: Los datos se ingresan de izquierda a derecha separados por comas.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a><span class="co"># Crear tibble orientado a filas (legible y tabulado)</span></span>
+<span id="cb13-2"><a href=""></a>datos_filas <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb13-3"><a href=""></a>  <span class="sc">~</span>id, <span class="sc">~</span>cliente,  <span class="sc">~</span>ventas, <span class="sc">~</span>categoria,</span>
+<span id="cb13-4"><a href=""></a>    <span class="dv">1</span>, <span class="st">"Ana"</span>,     <span class="dv">1500</span>,    <span class="st">"Premium"</span>,</span>
+<span id="cb13-5"><a href=""></a>    <span class="dv">2</span>, <span class="st">"Carlos"</span>,  <span class="dv">2300</span>,    <span class="st">"Estándar"</span>,</span>
+<span id="cb13-6"><a href=""></a>    <span class="dv">3</span>, <span class="st">"Beatriz"</span>, <span class="dv">1800</span>,    <span class="st">"Premium"</span></span>
+<span id="cb13-7"><a href=""></a>)</span>
+<span id="cb13-8"><a href=""></a></span>
+<span id="cb13-9"><a href=""></a><span class="fu">print</span>(datos_filas)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 4
+     id cliente ventas categoria
+  &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;    
+1     1 Ana       1500 Premium  
+2     2 Carlos    2300 Estándar 
+3     3 Beatriz   1800 Premium  </code></pre>
+</div>
+</div>
+</section>
+<section id="importar-múltiples-archivos" class="slide level2">
+<h2>Importar múltiples archivos</h2>
+<p>A veces es necesario importar varios archivos al mismo tiempo</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="fu">library</span>(readr)</span>
+<span id="cb15-2"><a href=""></a><span class="co">#1.Listar los archivos</span></span>
+<span id="cb15-3"><a href=""></a><span class="fu">list.files</span>(<span class="st">"Datos/Ejemplo_datos/datos_multiple/"</span>, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.csv$"</span>) </span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "clientes.csv"   "envios.csv"     "inventario.csv" "ventas.csv"    </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="co">#Lee e importa todos los archivos csv a una lista</span></span>
+<span id="cb17-2"><a href=""></a>todos_data_frames <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">list.files</span>(<span class="st">"Datos/Ejemplo_datos/datos_multiple/"</span>, <span class="at">pattern =</span> <span class="st">"*.csv"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>), read_csv)</span>
+<span id="cb17-3"><a href=""></a>todos_data_frames</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+# A tibble: 3 × 3
+     id nombre  ciudad 
+  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;  
+1     1 Ana     Mendoza
+2     2 Carlos  Rosario
+3     3 Beatriz Cordoba
+
+[[2]]
+# A tibble: 3 × 3
+     id transporte       estado   
+  &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;    
+1     1 Andreani         Entregado
+2     2 OCA              En camino
+3     3 Correo Argentino Pendiente
+
+[[3]]
+# A tibble: 3 × 3
+  producto stock categoria  
+  &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;      
+1 Laptop      15 Cómputo    
+2 Mouse      120 Periféricos
+3 Teclado     45 Periféricos
+
+[[4]]
+# A tibble: 3 × 3
+     id producto monto
+  &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;
+1     1 Laptop    1200
+2     2 Mouse       25
+3     3 Teclado     45</code></pre>
+</div>
+</div>
+</section>
+<section id="ejercitando-ii" class="slide level2 smaller">
+<h2>Ejercitando (II)</h2>
+<div class="callout callout-important callout-style-simple">
+<div class="callout-body">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-content">
+<p>📁 <strong>Conjunto de datos:</strong> <code>precios_manzana_pera_desde17_corpat.csv.gz</code> — Registro de precios de Manzanas y Peras (MCBA, 2017–2026).</p>
+</div>
+</div>
+</div>
+<ol type="1">
+<li class="fragment"><strong>Compresión (.gz):</strong> ¿Qué tipo de archivo es y qué ventajas presenta respecto a un <code>.csv</code> tradicional?</li>
+<li class="fragment"><strong>Importación y estructura:</strong> Importar los datos. ¿Qué función de <code>{readr}</code> se usa, qué dimensiones tiene el <em>tibble</em> y qué tipos de datos contiene?</li>
+<li class="fragment"><strong>Formato de fechas:</strong> Transformar la columna <code>dia</code> a formato de fecha utilizando el paquete <code>{lubridate}</code>.</li>
+<li class="fragment"><strong>Extracción de componentes:</strong> Obtener variables para <strong>año</strong>, <strong>mes (con nombre)</strong> y <strong>semana del año</strong>.</li>
+<li class="fragment"><strong>Filtrado y visualización:</strong> Filtrar la especie <code>"Manzana"</code>, calcular la media del <code>MOPK</code> por año/mes y graficar. ¿Qué patrón o dato extraño se observa?</li>
+</ol>
+</section></section>
+<section>
+<section id="bases-de-datos" class="title-slide slide level1 center">
+<h1>Bases de datos</h1>
+
+<img data-src="./Imagenes/brutal.jpg" style="width:50.0%" class="r-stretch quarto-figure-center"><p class="caption">Librerías de tidyverse</p></section>
+<section id="qué-es-una-base-de-datos" class="slide level2 smaller">
+<h2>¿Qué es una Base de Datos?</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<h3 id="una-analogía-sencilla">Una analogía sencilla</h3>
+<p>Podemos concebirla como <strong>gran biblioteca digital centralizada</strong>:</p>
+<ul>
+<li>En lugar de tener archivos Excel desparramados en la computadora, la información está ordenada en <strong>tablas</strong>.</li>
+<li>Cada tabla es como una planilla (con columnas para variables y filas para registros).</li>
+<li>El sistema garantiza que los datos estén <strong>protegidos</strong>, <strong>actualizados</strong> y <strong>disponibles</strong> para muchas personas al mismo tiempo.</li>
+</ul>
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>💡 La diferencia con Excel</strong></p>
+</div>
+<div class="callout-content">
+<p>Un archivo <code>.xlsx</code> esta en la computadora y tiene un límite estricto de filas. Una <strong>Base de Datos</strong> vive en un servidor, maneja millones de datos y no se “cuelga”.</p>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<h3 id="por-qué-las-usamos-en-ciencia-de-datos">¿Por qué las usamos en Ciencia de Datos?</h3>
+<ul>
+<li><strong>Estructura limpia:</strong> Evita datos duplicados o inconsistentes.</li>
+<li><strong>Velocidad de búsqueda:</strong> Utiliza <strong>índices</strong> (como el índice de un libro) para encontrar un registro en milisegundos entre millones de filas.</li>
+<li><strong>Fuente única de verdad:</strong> Todo el equipo analiza los mismos datos reales sin andar enviándose versiones (<code>datos_final_v2.csv</code>).</li>
+</ul>
+</div></div>
+</section>
+<section id="acceso-a-bases-de-datos-en-r" class="slide level2 smaller">
+<h2>Acceso a Bases de Datos en R</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<h3 id="por-qué-conectarse-directamente">¿Por qué conectarse directamente?</h3>
+<ul>
+<li><strong>Autonomía:</strong> Evita depender de descargas intermedias de archivos <code>.csv</code>.</li>
+<li><strong>Eficiencia:</strong> Consulta los datos necesarios en tiempo real directamente en el servidor.</li>
+<li><strong>Estándar:</strong> Interactúa mediante SQL usando tus sintaxis habituales de <code>dplyr</code>.</li>
+</ul>
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>🛠️ Herramientas clave</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li><strong><code>DBI</code></strong>: Interfaz de bajo nivel que gestiona la conexión y ejecuta consultas SQL.</li>
+<li><strong><code>dbplyr</code></strong>: Interfaz de alto nivel que traduce código <code>dplyr</code> a consultas SQL.</li>
+</ul>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<h3 id="paquetes-requeridos">Paquetes requeridos</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="fu">library</span>(DBI)</span>
+<span id="cb19-2"><a href=""></a><span class="fu">library</span>(dbplyr)</span>
+<span id="cb19-3"><a href=""></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-tip no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>💡 Filosofía</p>
+<p>No necesitas ser un experto en SQL para empezar: {dbplyr} traduce tus operaciones de manipulación de datos automáticamente.</p>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="conexión-a-una-base-de-datos" class="slide level2 smaller">
+<h2>Conexión a una Base de Datos</h2>
+<div class="columns">
+<div class="column" style="width:45%;">
+<p>Arquitectura de Conexión</p>
+<p>DBI: Proporciona las funciones genéricas de control (dbConnect(), etc.).</p>
+<p>Driver específico: Paquete según el motor (ej: RPostgres o RMariaDB).</p>
+<p>odbc: Protocolo alternativo universal si no hay un driver nativo.</p>
+<div class="callout callout-warning no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Advertencia</strong></p>
+</div>
+<div class="callout-content">
+<p>🔑 Credenciales</p>
+<p>Los parámetros de conexión (host, puerto, usuario, contraseña) te los proporcionará el administrador de la base de datos (DBA).</p>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:55%;">
+<p>Ejemplo de Conexión en R R</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a><span class="co"># Ejemplo 1: Conexión a MariaDB</span></span>
+<span id="cb20-2"><a href=""></a>con <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(</span>
+<span id="cb20-3"><a href=""></a>  RMariaDB<span class="sc">::</span><span class="fu">MariaDB</span>(), </span>
+<span id="cb20-4"><a href=""></a>  <span class="at">username =</span> <span class="st">"foo"</span></span>
+<span id="cb20-5"><a href=""></a>)</span>
+<span id="cb20-6"><a href=""></a></span>
+<span id="cb20-7"><a href=""></a><span class="co"># Ejemplo 2: Conexión a PostgreSQL en servidor remoto</span></span>
+<span id="cb20-8"><a href=""></a>con <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(</span>
+<span id="cb20-9"><a href=""></a>  RPostgres<span class="sc">::</span><span class="fu">Postgres</span>(), </span>
+<span id="cb20-10"><a href=""></a>  <span class="at">hostname =</span> <span class="st">"databases.mycompany.com"</span>, </span>
+<span id="cb20-11"><a href=""></a>  <span class="at">port =</span> <span class="dv">1234</span></span>
+<span id="cb20-12"><a href=""></a>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div></div>
+</section>
+<section id="paso-1conexión-a-la-base" class="slide level2">
+<h2>Paso 1:Conexión a la base</h2>
+<p>Cargar paquetes y conectar a la base de datos</p>
+<p>Usamos DBI para crear el canal de comunicación con la base SQLite y dbplyr para trabajar con sintaxis R sobre las tablas remotas. R.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a><span class="fu">library</span>(DBI)</span>
+<span id="cb21-2"><a href=""></a><span class="fu">library</span>(RSQLite)</span>
+<span id="cb21-3"><a href=""></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb21-4"><a href=""></a><span class="fu">library</span>(dbplyr)</span>
+<span id="cb21-5"><a href=""></a></span>
+<span id="cb21-6"><a href=""></a><span class="co"># Establecer la conexión con el archivo de base de datos</span></span>
+<span id="cb21-7"><a href=""></a>con1 <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(</span>
+<span id="cb21-8"><a href=""></a>  RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), </span>
+<span id="cb21-9"><a href=""></a>  <span class="st">"Datos/Ejemplo_datos/diamonds_relacional.sqlite"</span></span>
+<span id="cb21-10"><a href=""></a>  )</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="paso-2-inspeccionar-tablas" class="slide level2">
+<h2>Paso 2: inspeccionar tablas</h2>
+<p>Antes de realizar la consulta, verificamos qué tablas existen dentro de la base de datos y qué columnas tiene cada una.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a><span class="co"># Listar todas las tablas en la base de datos</span></span>
+<span id="cb22-2"><a href=""></a><span class="fu">dbListTables</span>(con1)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "claridades" "cortes"     "diamantes" </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a><span class="co"># Resultado esperado: "claridades" "cortes" "diamantes"</span></span>
+<span id="cb24-2"><a href=""></a></span>
+<span id="cb24-3"><a href=""></a><span class="co"># Ver las columnas de una tabla específica</span></span>
+<span id="cb24-4"><a href=""></a><span class="fu">dbListFields</span>(con1, <span class="st">"diamantes"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "id_diamante" "carat"       "color"       "price"       "x"          
+[6] "y"           "z"           "id_corte"    "id_claridad"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a><span class="co"># (Opcional) Ver la estructura general mediante una consulta SQL rápida</span></span>
+<span id="cb26-2"><a href=""></a><span class="fu">dbGetQuery</span>(con1, <span class="st">"SELECT COUNT(*) AS total_filas FROM diamantes"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  total_filas
+1       53940</code></pre>
+</div>
+</div>
+</section>
+<section id="paso-3-crear-referencias-de-tabla-con-dbplyr" class="slide level2">
+<h2>Paso 3: Crear referencias de tabla con dbplyr</h2>
+<p>La función tbl() crea un objeto lazy table. No carga los 50.000 datos en la memoria RAM de R, sino que establece un enlace hacia la tabla en disco.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a><span class="co"># Crear referencias virtuales a cada tabla</span></span>
+<span id="cb28-2"><a href=""></a>diamantes_db <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con1, <span class="st">"diamantes"</span>)</span>
+<span id="cb28-3"><a href=""></a>cortes_db    <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con1, <span class="st">"cortes"</span>)</span>
+<span id="cb28-4"><a href=""></a>claridades_db <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con1, <span class="st">"claridades"</span>)</span>
+<span id="cb28-5"><a href=""></a></span>
+<span id="cb28-6"><a href=""></a><span class="co"># Si imprimes la variable, muestra las primeras 10 filas sin traer toda la base</span></span>
+<span id="cb28-7"><a href=""></a><span class="fu">print</span>(diamantes_db)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Source:   table&lt;`diamantes`&gt; [?? x 9]
+# Database: sqlite 3.53.3 [/home/gustavo/Documentos/Cursos_Postgrado/C_de_D/Clase_4/Clase_4/Datos/Ejemplo_datos/diamonds_relacional.sqlite]
+   id_diamante carat color price     x     y     z id_corte id_claridad
+         &lt;int&gt; &lt;dbl&gt; &lt;chr&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;int&gt;       &lt;int&gt;
+ 1           1  0.23 E       326  3.95  3.98  2.43        1           1
+ 2           2  0.21 E       326  3.89  3.84  2.31        2           2
+ 3           3  0.23 E       327  4.05  4.07  2.31        3           3
+ 4           4  0.29 I       334  4.2   4.23  2.63        2           4
+ 5           5  0.31 J       335  4.34  4.35  2.75        3           1
+ 6           6  0.24 J       336  3.94  3.96  2.48        4           5
+ 7           7  0.24 I       336  3.95  3.98  2.47        4           6
+ 8           8  0.26 H       337  4.07  4.11  2.53        4           2
+ 9           9  0.22 E       337  3.87  3.78  2.49        5           4
+10          10  0.23 H       338  4     4.05  2.39        4           3
+# ℹ more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="paso-4-manipular-los-datos-con-sintaxis-dplyr" class="slide level2">
+<h2>Paso 4: Manipular los datos con sintaxis dplyr</h2>
+<p>Se usan los verbos habituales de {dplyr} (filter, group_by, summarise, left_join, mutate). Todo se procesará dentro del motor SQLite.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a><span class="co"># Unir las 3 tablas relacionales y calcular el precio medio por tipo de corte</span></span>
+<span id="cb30-2"><a href=""></a>resumen_cortes <span class="ot">&lt;-</span> diamantes_db <span class="sc">%&gt;%</span> </span>
+<span id="cb30-3"><a href=""></a>  <span class="fu">left_join</span>(cortes_db, <span class="at">by =</span> <span class="st">"id_corte"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-4"><a href=""></a>  <span class="fu">left_join</span>(claridades_db, <span class="at">by =</span> <span class="st">"id_claridad"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-5"><a href=""></a>  <span class="fu">filter</span>(price <span class="sc">&gt;</span> <span class="dv">1000</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-6"><a href=""></a>  <span class="fu">group_by</span>(corte) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-7"><a href=""></a>  <span class="fu">summarise</span>(</span>
+<span id="cb30-8"><a href=""></a>    <span class="at">cantidad =</span> <span class="fu">n</span>(),</span>
+<span id="cb30-9"><a href=""></a>    <span class="at">precio_promedio =</span> <span class="fu">mean</span>(price, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb30-10"><a href=""></a>    <span class="at">quilates_max =</span> <span class="fu">max</span>(carat, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb30-11"><a href=""></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-12"><a href=""></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(precio_promedio))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="paso-6-traer-el-resultado-final-a-r-con-collect" class="slide level2">
+<h2>Paso 6: Traer el resultado final a R con collect()</h2>
+<p>Hasta este punto, nada se ha descargado a R. Cuando se requiera guardar el resultado procesado como un data.frame local, se ejecut collect():</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a><span class="co"># Descargar el resultado procesado a la memoria RAM de R</span></span>
+<span id="cb31-2"><a href=""></a>datos_locales <span class="ot">&lt;-</span> resumen_cortes <span class="sc">%&gt;%</span> <span class="fu">collect</span>()</span>
+<span id="cb31-3"><a href=""></a></span>
+<span id="cb31-4"><a href=""></a><span class="co"># Verificar la clase del objeto procesado</span></span>
+<span id="cb31-5"><a href=""></a><span class="fu">class</span>(datos_locales) <span class="co"># "tbl_df" "tbl" "data.frame"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "tbl_df"     "tbl"        "data.frame"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a><span class="do">### Graficar el resultado local</span></span>
+<span id="cb33-2"><a href=""></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb33-3"><a href=""></a></span>
+<span id="cb33-4"><a href=""></a><span class="fu">ggplot</span>(datos_locales, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(corte, precio_promedio), <span class="at">y =</span> precio_promedio)) <span class="sc">+</span></span>
+<span id="cb33-5"><a href=""></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"#38bdf8"</span>) <span class="sc">+</span></span>
+<span id="cb33-6"><a href=""></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb33-7"><a href=""></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Precio promedio por corte"</span>, <span class="at">x =</span> <span class="st">"Corte"</span>, <span class="at">y =</span> <span class="st">"USD"</span>) <span class="sc">+</span></span>
+<span id="cb33-8"><a href=""></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="Encuentro_4_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" class="r-stretch"></section>
+<section id="ver-la-sintaxis-que-de-sql" class="slide level2">
+<h2>Ver la sintaxis que de sql</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a><span class="co"># Ver la consulta SQL en texto plano que se enviará al servidor</span></span>
+<span id="cb34-2"><a href=""></a>resumen_cortes <span class="sc">%&gt;%</span> <span class="fu">show_query</span>()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;SQL&gt;
+SELECT
+  `corte`,
+  COUNT(*) AS `cantidad`,
+  AVG(`price`) AS `precio_promedio`,
+  MAX(`carat`) AS `quilates_max`
+FROM (
+  SELECT `q01`.*
+  FROM (
+    SELECT `diamantes`.*, `corte`, `claridad`
+    FROM `diamantes`
+    LEFT JOIN `cortes`
+      ON (`diamantes`.`id_corte` = `cortes`.`id_corte`)
+    LEFT JOIN `claridades`
+      ON (`diamantes`.`id_claridad` = `claridades`.`id_claridad`)
+  ) AS `q01`
+  WHERE (`price` &gt; 1000.0)
+) AS `q01`
+GROUP BY `corte`
+ORDER BY `precio_promedio` DESC</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a><span class="fu">library</span>(dm)</span>
+<span id="cb36-2"><a href=""></a></span>
+<span id="cb36-3"><a href=""></a><span class="co"># Carga las tablas, PK y FK automáticamente desde el esquema de SQLite</span></span>
+<span id="cb36-4"><a href=""></a>modelo_dm <span class="ot">&lt;-</span> <span class="fu">dm_from_src</span>(con1)</span>
+<span id="cb36-5"><a href=""></a></span>
+<span id="cb36-6"><a href=""></a><span class="co"># Dibujar directamente</span></span>
+<span id="cb36-7"><a href=""></a><span class="fu">dm_draw</span>(modelo_dm)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="desconectar-de-la-base-de-daos" class="slide level2">
+<h2>Desconectar de la base de daos</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a><span class="fu">dbDisconnect</span>(con1)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="Encuentro_4_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="Encuentro_4_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="Encuentro_4_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="Encuentro_4_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="Encuentro_4_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="Encuentro_4_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="Encuentro_4_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="Encuentro_4_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="Encuentro_4_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="Encuentro_4_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copiado");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copiado");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
