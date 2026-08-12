@@ -4,8 +4,6 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of Clase_4 is to ...
-
 
 **Curso:** Introducción a Ciencia de Datos  
 **Docentes:** Dr. Gustavo Giménez | Mg. Ana Haique  
